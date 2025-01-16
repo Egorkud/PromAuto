@@ -3,6 +3,7 @@ from openpyxl.workbook import Workbook
 
 from instruments import config
 
+# Project initialisation
 def init_project():
     def create_path(*files):
         for i in files:
@@ -57,3 +58,38 @@ def init_project():
     lists_of_cars = Path("lists of cars")
     work_result = Path("work result")
     create_path(lists_of_cars, work_result)
+
+# region Descriptions
+def clean_descriptions():
+    dir_path = Path("Descriptions")
+    dir_ru = dir_path / "ru"
+    dir_ukr = dir_path / "ukr"
+    models_ru = dir_ru / "models"
+    models_ukr = dir_ukr / "models"
+
+    main_files = tuple(map(str, dir_path.glob("*.txt")))
+    ru_files = tuple(map(str, dir_ru.glob("*.txt")))
+    ukr_files = tuple(map(str, dir_ukr.glob("*.txt")))
+    ru_models = tuple(map(str, models_ru.glob("*.txt")))
+    ukr_models = tuple(map(str, models_ukr.glob("*.txt")))
+
+    def cleaner(*lists):
+        for files_list in lists:
+            for i in files_list:
+                with open(i, "w", encoding="utf-8"):
+                    pass
+
+    cleaner(main_files, ru_files, ukr_files, ru_models, ukr_models)
+
+def description_splitter():
+    with open("new descriptions.txt", "r", encoding="utf-8") as file:
+        lines = file.read().split("\n")
+        clean_lines = tuple(filter(lambda line: len(line) > 25, lines))
+
+    for num, line in enumerate(clean_lines):
+        with open(f"Descriptions/ru/{num + 1}.txt", "w", encoding="utf-8") as file:
+            file.write(line)
+        print(f"{num + 1}: {line}")
+# endregion
+
+

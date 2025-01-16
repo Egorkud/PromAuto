@@ -42,6 +42,19 @@ def main():
     start = time.time()
     DI.init_project() # Initialises all dirs and files for work
 
+    # Chose options
+    # region data_scrappers
+
+    # endregion
+
+    # region import_generators
+
+    # endregion
+
+    # region data_instruments
+    DI.clean_descriptions()         # Cleans all data from all descriptions files
+    DI.description_splitter()
+    # endregion
 
     # region Closing sheets
     export_file.close()
