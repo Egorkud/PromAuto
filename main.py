@@ -1,10 +1,8 @@
-import json
-import openpyxl
 import time
 
 from pathlib import Path
 from openpyxl.workbook import Workbook
-import config
+from instruments import config
 
 
 def main():
