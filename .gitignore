@@ -2,7 +2,8 @@
 /descriptions
 /lists of cars
 /work result
-
+*.xlsx
+*.rar
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
