@@ -40,11 +40,11 @@ except Exception as ex:
 
 def main():
     start = time.time()
-    DI.init_project() # Initialises all dirs and files for work
+    # DI.init_project() # Initialises all dirs and files for work
 
     # Chose options
     # region data_scrappers
-
+    # DS.large_import_data_to_excel("name.xlsx", "name", 1, export_sheet, empty_sheet, new_groups_sheet, book_empty)  # Useful for make table with names etc.(constructor)
     # endregion
 
     # region import_generators
@@ -52,8 +52,8 @@ def main():
     # endregion
 
     # region data_instruments
-    DI.clean_descriptions()         # Cleans all data from all descriptions files
-    DI.description_splitter()
+    # DI.clean_descriptions()         # Cleans all data from all descriptions files
+    # DI.description_splitter()
     # endregion
 
     # region Closing sheets

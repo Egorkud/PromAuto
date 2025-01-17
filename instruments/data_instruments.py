@@ -92,4 +92,27 @@ def description_splitter():
         print(f"{num + 1}: {line}")
 # endregion
 
+# region Work with groups
+def create_group(mark, duplicates_groups):
+    if mark not in duplicates_groups and mark is not None:
+        duplicates_groups.append(mark)
 
+    if mark is None:
+        group_id = 1
+    else:
+        group_id = duplicates_groups.index(mark)
+
+    return group_id, mark, duplicates_groups
+
+
+def add_gift_keys(key_ru, key_ukr, name_ru, name_ukr):
+    if len(key_ru) <= 1024 and key_ru.find("Подарок") == False:
+        # Ru
+        key_ru = key_ru + (f", Подарок владельцу автомобиля {name_ru}, Подарок водителю {name_ru}, "
+                           f"Подарок в машину {name_ru}, Подарок для {name_ru}, Подарок для владельца {name_ru}")
+        # Ukr
+        key_ukr = key_ukr + (f", Подарунок власнику автомобіля {name_ukr}, Подарунок водієві {name_ukr}, "
+                             f"Подарунок до авто {name_ukr}, Подарунок для {name_ukr}, Подарунок для власника {name_ukr}")
+    return key_ru, key_ukr
+
+# endregion
