@@ -1,5 +1,6 @@
 from pathlib2 import Path
 from openpyxl.workbook import Workbook
+import datetime
 
 from instruments import config
 
@@ -90,6 +91,26 @@ def description_splitter():
         with open(f"Descriptions/ru/{num + 1}.txt", "w", encoding="utf-8") as file:
             file.write(line)
         print(f"{num + 1}: {line}")
+
+def how_many_marks(export_sheet):
+    marks = get_all_marks(export_sheet)
+    print(f"There are in total: {len(marks)} marks, not counting two-coloured positions (like skoda, skoda_white)")
+    print(marks)
+
+def check_duplicates(models_sheet):
+    duplicates = []
+    with open("dublicates_log.txt", "w", encoding="utf-8") as file:
+        file.write(str(datetime.datetime.now()) + "\n\n")
+        for row in range(1, models_sheet.max_row + 1):
+            name = models_sheet.cell(row, 2).value
+            name_add = models_sheet.cell(row, 5).value
+            full_name = name + name_add
+            if full_name in duplicates:
+                info = f"{row}. {full_name}"
+                print(info)
+                file.write(info + "\n")
+            else:
+                duplicates.append(full_name)
 # endregion
 
 # region Data scrappers additions
