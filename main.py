@@ -46,6 +46,7 @@ def main():
     # region data_scrappers
     # DS.large_import_data_to_excel("name.xlsx", "name", 1, export_sheet, empty_sheet, new_groups_sheet, book_empty)  # Useful for make table with names etc.(constructor)
     # DS.key_generator("name.xlsx", models_sheet, empty_sheet, book_empty) # Useful only for generating keys
+    # DS.get_photo_data(export_sheet, data_changes["colours"], True) # Create json dict file with photo links
     # endregion
 
     # region import_generators

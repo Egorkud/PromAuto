@@ -92,7 +92,8 @@ def description_splitter():
         print(f"{num + 1}: {line}")
 # endregion
 
-# region Work with groups
+# region Data scrappers additions
+# region large_import_data_to_excel
 def create_group(mark, duplicates_groups):
     if mark not in duplicates_groups and mark is not None:
         duplicates_groups.append(mark)
@@ -104,7 +105,6 @@ def create_group(mark, duplicates_groups):
 
     return group_id, mark, duplicates_groups
 
-
 def add_gift_keys(key_ru, key_ukr, name_ru, name_ukr):
     if len(key_ru) <= 1024 and key_ru.find("Подарок") == False:
         # Ru
@@ -114,5 +114,51 @@ def add_gift_keys(key_ru, key_ukr, name_ru, name_ukr):
         key_ukr = key_ukr + (f", Подарунок власнику автомобіля {name_ukr}, Подарунок водієві {name_ukr}, "
                              f"Подарунок до авто {name_ukr}, Подарунок для {name_ukr}, Подарунок для власника {name_ukr}")
     return key_ru, key_ukr
+# endregion
 
+# region get_photo_data
+def get_mark(row, sheet):
+    for i in range(50, 85):
+        if sheet.cell(row, i).value == "Марка":
+            return sheet.cell(row, i + 2).value
+
+def get_colour(row, sheet):
+    for i in range(50, 85):
+        if sheet.cell(row, i).value == "Цвет":
+            return sheet.cell(row, i + 2).value
+
+def get_all_marks(export_sheet):
+    duplicates = []
+    for row in range(2, export_sheet.max_row + 1):
+        for i in range(50, 85):
+            cell = export_sheet.cell(row, i).value
+            if cell == "Марка":
+                mark = export_sheet.cell(row, i + 2).value
+                if mark not in duplicates:
+                    duplicates.append(mark)
+                break
+
+    return duplicates
+
+def create_empty_marks_coloured_dict(duplicates, colours):
+    empty_dict = {}
+    for i in duplicates:
+        empty_dict.update([(i, {})])
+        for colour in colours:
+            sub_dict = empty_dict.get(i)
+            sub_dict.update([(colour, "")])
+
+    return empty_dict
+
+def create_empty_coloured_dict(marks, colours):
+    empty_dict = {}
+    if len(colours) == 1:
+        for mark in marks:
+            empty_dict.update([(mark, "")])
+    else:
+        for colour in colours:
+            empty_dict.update([(colour, "")])
+
+    return empty_dict
+# endregion
 # endregion

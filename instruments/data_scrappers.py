@@ -125,3 +125,25 @@ def key_generator(name, models_sheet, empty_sheet, book_empty):
 
     print(f"File created: {name}")
     book_empty.save(name)
+
+def get_photo_data(export_sheet, colours, colours_for_one_mark):
+    marks = DI.get_all_marks(export_sheet)
+    if colours_for_one_mark:
+        models_dict = DI.create_empty_coloured_dict(marks, colours)
+    else:
+        models_dict = DI.create_empty_marks_coloured_dict(marks, colours)
+
+    for row in range(2, export_sheet.max_row + 1):
+        link = export_sheet.cell(row, 15).value
+        mark = DI.get_mark(row, export_sheet)
+        colour = DI.get_colour(row, export_sheet)
+
+        if colours_for_one_mark and len(colours) == 1:
+            models_dict[mark] = link
+        elif colours_for_one_mark:
+            models_dict[colour] = link
+        else:
+            models_dict[mark][colour] = link
+        # print(models_dict)
+    with open("data/links_data.json", "w", encoding="utf-8") as file:
+        file.write(json.dumps(models_dict, indent=4))
