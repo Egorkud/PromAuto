@@ -50,13 +50,13 @@ def main():
     # endregion
 
     # region import_generators
-
+    # IG.autofill_generator("name.xlsx", models_sheet, blank_book, blank_products, blank_groups, groups_sheet, data_changes, links_data) # Universal
     # endregion
 
     # region data_instruments
-    # DI.clean_descriptions()         # Cleans all data from all descriptions files
-    # DI.description_splitter()       # Splits desctriptions from one file to descriptions dir
-    # DI.how_many_marks(export_sheet) # Simple print out number and all the marks
+    # DI.clean_descriptions()           # Cleans all data from all descriptions files
+    # DI.description_splitter()         # Splits desctriptions from one file to descriptions dir
+    # DI.how_many_marks(export_sheet)   # Simple print out number and all the marks
     # DI.check_duplicates(models_sheet) # Simple print out all the duplicated marks (name + seat_year)
     # endregion
 

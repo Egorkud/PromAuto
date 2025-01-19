@@ -1,6 +1,7 @@
 from pathlib2 import Path
 from openpyxl.workbook import Workbook
 import datetime
+import re
 
 from instruments import config
 
@@ -60,7 +61,7 @@ def init_project():
     work_result = Path("work result")
     create_path(lists_of_cars, work_result)
 
-# region Descriptions
+# region Useful instruments
 def clean_descriptions():
     dir_path = Path("Descriptions")
     dir_ru = dir_path / "ru"
@@ -182,4 +183,51 @@ def create_empty_coloured_dict(marks, colours):
 
     return empty_dict
 # endregion
+# endregion
+
+# region Import generators additions
+def get_groups_data(groups_sheet):
+    groups = {}
+    for row in range(1, groups_sheet.max_row + 1):
+        group_id = groups_sheet.cell(row, 1).value
+        name = groups_sheet.cell(row, 2).value
+        groups.update([(name, group_id)])
+    return groups
+
+def fulfill_groups_data(blank_groups, groups_data, parent_group):
+    group_names = tuple(groups_data.keys())
+    group_ids = tuple(groups_data.values())
+    print(group_names)
+    print(group_ids)
+
+    if parent_group:
+        for row in range(3, len(group_ids) + 2):
+            blank_groups.cell(row, 6).value = group_ids[0]
+
+    for i in range(len(group_names)):
+        blank_groups.cell(i + 2, 2).value = group_names[i]
+        blank_groups.cell(i + 2, 4).value = group_ids[i]
+
+def replace_names(full_name, name, name_engl, seat_year_name, colour, add_colour):
+    if seat_year_name is None:
+        full_name = full_name.replace(" name2", "")
+
+    if add_colour:
+        full_name = f"{full_name} {colour}"
+
+    old_words = ("name", "name_en", "name2")
+    new_words = ( name, name_engl, seat_year_name)
+    for index, word in enumerate(old_words):
+        pattern =  r"\b" + word + r"\b"
+        full_name = re.sub(pattern, new_words[index], full_name)
+    return full_name
+
+def descriptions_generator(dcounter, new_name, language):
+    with open(f"Descriptions/Description main {language}.txt", "r", encoding="utf-8") as file:
+        data = file.read()
+    with open(f"Descriptions/{language}/{dcounter}.txt", "r", encoding="utf-8") as file:
+        data_text = file.read()
+        new_text = data.replace("description", f"{data_text}")
+        new_text = new_text.replace("name", f"{new_name}")
+    return new_text
 # endregion
