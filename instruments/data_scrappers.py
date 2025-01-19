@@ -94,3 +94,34 @@ def large_import_data_to_excel(name, parent_group_name, step, export_sheet, empt
 
     print(f"File created: {name}")
     book_empty.save(name)
+
+def key_generator(name, models_sheet, empty_sheet, book_empty):
+    full_keys_name_ru = config.keys_ru
+    full_keys_name_ukr = config.keys_ukr
+    for row in range(1, models_sheet.max_row + 1):
+        empty_sheet.cell(row, column=1).value = row
+
+        name_engl = models_sheet.cell(row, column=2).value
+        name_ru = models_sheet.cell(row, column=3).value
+        name_ukr = models_sheet.cell(row, column=4).value
+
+        # engl_orig = original
+        # engl_big1 = first letter is big, other are small
+        # ru_big1 = first letter is big, other are small
+        # ru_small = all letters are small
+
+        new_keys_ru = full_keys_name_ru.replace("engl_orig", f"{name_engl}")
+        new_keys_ru = new_keys_ru.replace("engl_big1", f"{name_engl.lower().title()}")
+        new_keys_ru = new_keys_ru.replace("ru_orig", f"{name_ru}")
+        new_keys_ru = new_keys_ru.replace("ru_small", f"{name_ru.lower()}")
+
+        new_keys_ukr = full_keys_name_ukr.replace("engl_orig", f"{name_engl}")
+        new_keys_ukr = new_keys_ukr.replace("engl_big1", f"{name_engl.lower().title()}")
+        new_keys_ukr = new_keys_ukr.replace("ukr_orig", f"{name_ukr}")
+        new_keys_ukr = new_keys_ukr.replace("ukr_small", f"{name_ukr.lower()}")
+
+        empty_sheet.cell(row, column=2).value = new_keys_ru
+        empty_sheet.cell(row, column=3).value = new_keys_ukr
+
+    print(f"File created: {name}")
+    book_empty.save(name)
