@@ -1,73 +1,38 @@
 import time
-import openpyxl
-import json
 
-from pathlib import Path
-from openpyxl.workbook import Workbook
-
-from instruments import config
-from instruments import data_instruments as DI
-from instruments import data_scrappers as DS
-from instruments import  import_generators as IG
-
-# Initialisation of sheets
-try:
-    export_file = openpyxl.open("name.xlsx", False)  # Main file to work, Prom export table
-    models_book = openpyxl.load_workbook("name.xlsx")  # Auto filled table (articule, engl, ru, ukr)
-    data_changes = config.data_changes
-    # region Sheet initialisaion
-    with open("data/links_data.json", "r", encoding="utf-8") as file:
-        links_data = json.load(file)
-
-    export_sheet = export_file.active
-
-    blank_book = openpyxl.open("data/Empty file for auto seat case.xlsx", False)  # Empty blank for any tasks, flexible
-    blank_products = blank_book["Export Products Sheet"]
-    blank_groups = blank_book["Export Groups Sheet"]
-
-    book_empty = openpyxl.Workbook() # Empty table
-    book_empty.remove(book_empty["Sheet"])
-    empty_sheet = book_empty.create_sheet("Export Products Sheet")
-    new_groups_sheet = book_empty.create_sheet("Export Groups Sheet")
-
-    models_sheet = models_book["Export Products Sheet"]
-    groups_sheet = models_book["Export Groups Sheet"]
-    # endregion
-except Exception as ex:
-    print(ex)
-    raise SystemExit
+from instruments.data_scrappers import DataScrapper
+from instruments.import_generators import ImportGenerator
+from instruments.data_instruments import DataInstruments
+from instruments.resources import Resources
 
 
 def main():
-    start = time.time()
-    # DI.init_project() # Initialises all dirs and files for work
+    DI.init_project() # Initialises all dirs and files for work
 
     # Chose options
     # region data_scrappers
-    # DS.large_import_data_to_excel("name.xlsx", "name", 1, export_sheet, empty_sheet, new_groups_sheet, book_empty)  # Useful for make table with names etc.(constructor)
-    # DS.key_generator("name.xlsx", models_sheet, empty_sheet, book_empty) # Useful only for generating keys
-    # DS.get_photo_data(export_sheet, data_changes["colours"], True) # Create json dict file with photo links
+    # DS.import_to_excel("name.xlsx", "name", 1)    # Useful for make table with names etc.(constructor)
+    # DS.key_generator("name.xlsx")                 # Useful only for generating keys
+    # DS.get_photo_data(True)                       # Create json dict file with photo links
     # endregion
 
     # region import_generators
-    # IG.autofill_generator("name.xlsx", models_sheet, blank_book, blank_products, blank_groups, groups_sheet, data_changes, links_data) # Universal
+    # IG.autofill_generator("filename.xlsx") # Universal
     # endregion
 
     # region data_instruments
     # DI.clean_descriptions()           # Cleans all data from all descriptions files
     # DI.description_splitter()         # Splits desctriptions from one file to descriptions dir
-    # DI.how_many_marks(export_sheet)   # Simple print out number and all the marks
-    # DI.check_duplicates(models_sheet) # Simple print out all the duplicated marks (name + seat_year)
+    # DI.how_many_marks()               # Simple print out number and all the marks
+    # DI.check_duplicates()             # Simple print out all the duplicated marks (name + seat_year)
     # endregion
 
-    # region Closing sheets
-    export_file.close()
-    models_book.close()
-    book_empty.close()
-    blank_book.close()
-    # endregion
-
-    print(f"\nTime elapsed: {time.time() - start} seconds")
 
 if __name__ == '__main__':
+    start = time.time()
+
+    DS, IG, DI, res = DataScrapper(), ImportGenerator(), DataInstruments(), Resources()
     main()
+    res.close()
+
+    print(f"\nTime elapsed: {time.time() - start} seconds")
